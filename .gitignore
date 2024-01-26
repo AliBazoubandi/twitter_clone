@@ -1,0 +1,9 @@
+# Node.js
+node_modules/
+
+# Environment variables
+scripts/.env
+
+#packages
+package-lock.json
+package.json
