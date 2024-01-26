@@ -50,6 +50,12 @@ const userController = {
     }
   },
 
+  logoutUser: (req, res) => {
+    res.clearCookie('token');
+
+    res.json({ message: 'Logout successful!' });
+  },
+
   getUserById: async (req, res) => {
     const userId = req.params.userId;
 
@@ -63,6 +69,34 @@ const userController = {
       const userWithoutPassword = { ...user.toObject(), password: undefined };
 
       res.json(userWithoutPassword);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  },
+
+  followUser: async (req, res) => {
+    const userId = req.user._id;
+    const { targetUserId } = req.params;
+
+    try {
+      await User.findByIdAndUpdate(userId, { $addToSet: { following: targetUserId } });
+
+      res.json({ message: 'User followed successfully!' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  },
+
+  unfollowUser: async (req, res) => {
+    const userId = req.user._id;
+    const { targetUserId } = req.params;
+
+    try {
+      await User.findByIdAndUpdate(userId, { $pull: { following: targetUserId } });
+
+      res.json({ message: 'User unfollowed successfully!' });
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'Internal Server Error' });

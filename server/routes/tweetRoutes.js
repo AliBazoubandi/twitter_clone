@@ -3,10 +3,8 @@ const router = express.Router();
 const tweetController = require('../controllers/tweetController');
 const authenticateUser = require('../middlewares/authenticateUser');
 
-// Create a tweet route
 router.post('/', authenticateUser, tweetController.createTweet);
-
-// Get all tweets route
 router.get('/', tweetController.getAllTweets);
+router.get('/home', authenticateUser, tweetController.getHomeTweets);
 
 module.exports = router;
