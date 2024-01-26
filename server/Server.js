@@ -11,7 +11,6 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger-output.json');
 
 const app = express();
-const port = 3001;
 
 app.use(cors());
 app.use(express.json());
