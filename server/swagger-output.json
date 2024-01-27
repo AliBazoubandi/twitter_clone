@@ -5,13 +5,13 @@
     "title": "REST API",
     "description": ""
   },
-  "host": "localhost:3000",
+  "host": "localhost:3333",
   "basePath": "/",
   "schemes": [
     "http"
   ],
   "paths": {
-    "/signup": {
+    "/api/users/signup": {
       "post": {
         "description": "",
         "parameters": [
