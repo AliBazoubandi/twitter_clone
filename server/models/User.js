@@ -7,6 +7,8 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   profilePicture: { type: String },
   following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  tweets: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tweet' }], 
+  retweets: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tweet' }],
 }, { timestamps: true });
 
 // Hash the password before saving it to the database
