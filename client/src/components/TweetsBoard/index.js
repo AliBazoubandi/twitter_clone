@@ -51,15 +51,15 @@ function SingleTweet({ tweet, queryKey }) {
     });
   };
 
-  const handleActionClick = (action, tweetId) => (e) => {
-    e.stopPropagation();
-    if (!tweet.author) return;
+  const handleActionClick = (action, tweetId) => {
+    // e.stopPropagation();
+    // if (!tweet.author) return;
 
-    if (!user) {
-      return history.push({
-        pathname: '/signin',
-      });
-    }
+    // if (!user) {
+    //   return history.push({
+    //     pathname: '/signin',
+    //   });
+    // }
 
     if (action === 'like') {
       likeTweetMutation.mutate(tweetId);
@@ -71,6 +71,7 @@ function SingleTweet({ tweet, queryKey }) {
   };
   const owner = user && user._id === tweet.author?._id;
   const liked = !!(user && tweet.likes.includes(user._id));
+  console.log('liked-----' , liked)
 
   return (
     <ListItem key={tweet._id} onClick={() => handleTweetClick(tweet)}>
@@ -102,9 +103,10 @@ function SingleTweet({ tweet, queryKey }) {
             <Icon as={FaRegComment} /> <span>{tweet.repliesCount}</span>
           </button>
           <button
-            onClick={handleActionClick(liked ? 'unlike' : 'like', tweet._id)}
-            disabled={!tweet.author}
+            onClick={()=>handleActionClick(liked ? 'unlike' : 'like', tweet._id)}
+            // disabled={!tweet.author}
           >
+            
             <LikeIcon liked={liked}>
               {liked ? <FaHeart /> : <FaRegHeart />}
             </LikeIcon>{' '}
@@ -150,9 +152,10 @@ function TweetsBoard({
     enabled: hasNextPage,
   });
 
+  console.log('pages',pages)
   const numberOfTweets =
-    pages?.reduce((acc, page) => acc + page.results.length, 0) ?? 0;
-
+    pages?.reduce((acc, page) => acc + page.length, 0) ?? 0;
+// console.log('numberOfTweets',numberOfTweets)
   return (
     <Container>
       <HeaderWrapper>
@@ -167,7 +170,7 @@ function TweetsBoard({
               <>
                 {pages.map((group, i) => (
                   <React.Fragment key={i}>
-                    {group.results.map((tweet) => (
+                    {group.map((tweet) => (
                       <SingleTweet
                         key={tweet._id}
                         tweet={tweet}

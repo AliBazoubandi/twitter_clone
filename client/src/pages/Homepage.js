@@ -29,6 +29,7 @@ function Homepage() {
             border: 1px solid #eee;
           `}
         >
+          {console.log('asdasdasd',data)}
           <TweetsBoard
             queryKey={['tweets', {}]}
             loading={status === 'loading'}

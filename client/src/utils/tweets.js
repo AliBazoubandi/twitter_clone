@@ -110,8 +110,8 @@ function useTweetLike(queryKey = ['tweets', {}]) {
   const queryClient = useQueryClient();
   const authUser = useUser();
   const { setAlert } = useAlert();
-
-  return useMutation((tweetId) => client.post(`/tweets/like/${tweetId}`), {
+  
+  return useMutation((tweetId) => client.post(`/tweets/${tweetId}/like`), {
     onMutate: async (tweetId) => {
       await queryClient.cancelQueries(queryKey);
 
@@ -132,12 +132,14 @@ function useTweetLike(queryKey = ['tweets', {}]) {
             ...old,
             pages: old.pages.map((page) => ({
               ...page,
-              results: page.results.map((tweet) => {
+              results: page.map((tweet) => {
+                debugger
+                console.log('sdfsdfsdf',tweetId)
                 if (tweet._id !== tweetId) return tweet;
 
                 return {
                   ...tweet,
-                  likes: [...tweet.likes, authUser._id],
+                  likes: [...tweet.likes, tweet.user._id],
                 };
               }),
             })),

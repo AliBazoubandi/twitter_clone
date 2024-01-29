@@ -17,15 +17,15 @@ function UserProvider(props) {
     }
   );
 
-  if (error) {
-    return <DisplayError error={error} />;
-  }
+  // if (error) {
+  //   return <DisplayError error={error} />;
+  // }
 
-  if (isLoading) {
-    return <Loading />;
-  }
+  // if (isLoading) {
+  //   return <Loading />;
+  // }
 
-  return <UserContext.Provider value={data?.user || null} {...props} />;
+  return <UserContext.Provider value={null} {...props} />;
 }
 
 export function useUser() {
