@@ -1,21 +1,32 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
-const userSchema = new mongoose.Schema({
-  username: { type: String, unique: true, required: true },
-  email: { type: String, unique: true, required: true },
-  password: { type: String, required: true },
-  profilePicture: { type: String },
-  following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-  tweets: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tweet' }], 
-  retweets: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tweet' }],
-}, { timestamps: true });
+const userSchema = new mongoose.Schema(
+  {
+    username: { type: String, unique: true, required: true },
+    email: { type: String, unique: true, required: true },
+    password: { type: String, required: true },
+    profilePicture: { type: String },
+    following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    tweets: [{ type: mongoose.Schema.Types.ObjectId, ref: "Tweet" }],
+    retweets: [{ type: mongoose.Schema.Types.ObjectId, ref: "Tweet" }],
+    activities: [
+      {
+        type: { type: String, required: true },
+        timestamp: { type: Date, default: Date.now },
+        user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+        tweet: { type: mongoose.Schema.Types.ObjectId, ref: "Tweet" },
+      },
+    ],
+  },
+  { timestamps: true }
+);
 
 // Hash the password before saving it to the database
-userSchema.pre('save', async function (next) {
+userSchema.pre("save", async function (next) {
   const user = this;
 
-  if (!user.isModified('password')) {
+  if (!user.isModified("password")) {
     return next();
   }
 
@@ -29,6 +40,6 @@ userSchema.methods.comparePassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;
