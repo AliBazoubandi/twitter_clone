@@ -9,6 +9,16 @@ import pick from 'lodash/pick';
 import { getFilteredQuery, objToQueryString } from './queryHelpers';
 import { useAlert } from 'context/AlertContext';
 import { useUser } from 'context/UserContext';
+// import Cookies from 'js-cookie';
+
+// const jwtToken = Cookies.get('token');
+// function getCookie(name) {
+//   const value = `; ${document.cookie}`;
+//   const parts = value.split(`; ${name}=`);
+//   if (parts.length === 2) return parts.pop().split(';').shift();
+// }
+// console.log('%%%%%%%%%%%%%%%',getCookie('token'));
+
 
 function useFeedTweets() {
   const fetchFeedTweets = ({ pageParam = 1 }) =>
@@ -35,7 +45,7 @@ function useTweets(query = {}) {
   const fetchTweets = ({ pageParam = 1 }) => {
     const queryString = objToQueryString({ ...filteredQuery, page: pageParam });
 
-    return client.get(`/tweets?${queryString}`).then((res) => res.data);
+    return client.get(`/tweets/`).then((res) => res.data);
   };
 
   return useInfiniteQuery(['tweets', filteredQuery], fetchTweets, {

@@ -41,9 +41,9 @@ const userController = {
 
       const token = jwt.sign({ user: { _id: user._id } }, secretKey);
 
-      res.cookie('token', token, { httpOnly: true, sameSite: 'strict' });
+      //res.cookie('token', token, { httpOnly: true, sameSite: 'strict' });
 
-      res.json({ message: 'Login successful!' });
+      res.json({ message: 'Login successful!' , jwtToken: token});
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'Internal Server Error' });

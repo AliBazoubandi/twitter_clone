@@ -2,10 +2,10 @@ import jwtDecode from 'jwt-decode';
 import client from './client';
 import setAuthToken from 'utils/setAuthToken';
 
-function handleResponse({ user, token }) {
-  localStorage.setItem('token', token);
-  setAuthToken(token);
-  return { user, token };
+function handleResponse({ user, jwtToken }) {
+  localStorage.setItem('token', jwtToken);
+  setAuthToken(jwtToken);
+  return { user, jwtToken };
 }
 
 async function loadUser() {
@@ -33,9 +33,9 @@ function registerUser(userData) {
     .then((res) => handleResponse(res.data));
 }
 
-function loginUser(userData) {
+function  loginUser(userData) {
   return client
-    .post('/auth/login', userData)
+    .post('/users/login', userData)
     .then((res) => handleResponse(res.data));
 }
 

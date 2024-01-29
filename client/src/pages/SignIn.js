@@ -21,7 +21,8 @@ function SignInPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const userData = { username: username.value, password: password.value };
+    const userData = { email: username.value, password: password.value };
+    console.log("here 1");
     const errors = validateForm(userData);
     if (errors) {
       setErrors(errors);

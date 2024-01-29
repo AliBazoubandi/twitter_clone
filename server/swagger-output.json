@@ -47,7 +47,7 @@
         }
       }
     },
-    "/login": {
+    "/api/users/login": {
       "post": {
         "description": "",
         "parameters": [
@@ -190,7 +190,7 @@
         }
       }
     },
-    "/": {
+    "/api/tweets/": {
       "post": {
         "description": "",
         "parameters": [
