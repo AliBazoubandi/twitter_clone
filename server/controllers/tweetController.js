@@ -1,10 +1,12 @@
 const Tweet = require("../models/Tweet");
 const User = require("../models/User");
 const removeRetweets = require("../middlewares/removeRetweets");
+const fs = require("fs");
+const path = require("path");
 
 const tweetController = {
   createTweet: async (req, res) => {
-    const { text, media, hashtags } = req.body;
+    const { text, hashtags } = req.body;
     const userId = req.user._id;
 
     try {
@@ -14,11 +16,35 @@ const tweetController = {
         return res.status(404).json({ error: "User not found" });
       }
 
-      const newTweet = new Tweet({ text, user: userId, media, hashtags });
+      const media = req.files && req.files.media ? req.files.media : "undefined";
+      
+      const uploadPath = path.join(
+        __dirname,
+        "..",
+        "uploads",
+        "media"
+      );
+
+      if (!fs.existsSync(uploadPath)) {
+        fs.mkdirSync(uploadPath, { recursive: true });
+      }
+
+      const mediaPath = path.join(uploadPath, media.name);
+
+      media.mv(mediaPath, (err) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ error: "Error saving media file" });
+        }
+      });
+
+      const newTweet = new Tweet({ text, user: userId, media: mediaPath, hashtags: hashtags });
       await newTweet.save();
 
       user.tweets.push(newTweet._id);
       await user.save();
+
+      await newTweet.populate("user", "username");
 
       res.status(201).json({ message: "Tweet created successfully!" });
     } catch (error) {
