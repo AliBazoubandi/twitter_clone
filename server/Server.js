@@ -22,7 +22,7 @@ mongoose.connect("mongodb://localhost:27017/twitter_clone");
 
 // Routes
 app.use("/api/users", userRoutes);
-app.use("/api/tweets", authenticateUser, tweetRoutes);
+app.use("/api/tweets", tweetRoutes);
 
 // Serve Swagger documentation
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));

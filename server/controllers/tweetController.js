@@ -211,6 +211,47 @@ const tweetController = {
       res.status(500).json({ error: "Internal Server Error" });
     }
   },
+
+  searchTweets: async (req, res) => {
+    const searchTerm = req.query.q;
+
+    try {
+      if (!searchTerm) {
+        return res.status(400).json({ error: "Search term is required" });
+      }
+
+      let tweets;
+
+      if (searchTerm.startsWith("#")) {
+        const hashtag = searchTerm.slice(1);
+        tweets = await Tweet.find({ hashtags: hashtag }).populate(
+          "user",
+          "username"
+        );
+      } else if (searchTerm.startsWith("@")) {
+        const username = searchTerm.slice(1);
+        const user = await User.findOne({ username });
+
+        if (user) {
+          tweets = await Tweet.find({ user: user._id }).populate(
+            "user",
+            "username"
+          );
+        } else {
+          tweets = [];
+        }
+      } else {
+        tweets = await Tweet.find({
+          text: { $regex: searchTerm, $options: "i" },
+        }).populate("user", "username");
+      }
+
+      res.json(tweets);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  },
 };
 
 module.exports = tweetController;
